@@ -1,4 +1,4 @@
-# Animal_Skin_Disease_Prediciton_Application
+# Animal Skin Disease Prediciton Application
 Animal Skin Disease Prediciton Application เป็นแอปพลิเคชันที่จะช่วยวิเคราะห์โรคผิวหนังของสัตว์ โดยจำแนกอาการจากภาพถ่ายของสัตว์ที่มีอาการผิดปกติ เช่น รอยแผล, การเปลี่ยนแปลงของผิวหนัง หรืออาการอื่นๆ เพื่อประเมินประเภทของโรคผิวหนังที่สัตว์อาจเป็น และสามารถแสดงผลการวิเคราะห์เบื้องต้น พร้อมคำแนะนำในการดูแล หรือคำเตือนในการพาสัตว์ไปพบสัตวแพทย์อย่างรวดเร็ว
 
 # Machine Learning Techniques
