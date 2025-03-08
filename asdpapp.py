@@ -58,7 +58,7 @@ class MainScreen(BoxLayout):
             
     def load_model(self):
         try:
-            model_path = 'C:\\Users\\asus\\OneDrive\\Desktop\\เอกสาร\\241-202\\asdpapp\\model1\\model_finetuned1_19-0.96.keras'
+            model_path = 'model_finetuned_path'
             self.model = load_model(model_path)
             print("Model loaded successfully")
 
