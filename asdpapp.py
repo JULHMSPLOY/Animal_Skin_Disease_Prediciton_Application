@@ -8,7 +8,7 @@ from kivy.uix.image import Image
 from kivy.uix.filechooser import FileChooserIconView
 from kivy.uix.popup import Popup
 from kivy.uix.gridlayout import GridLayout
-from kivy.properties import StringProperty, NumericProperty, ObjectProperty
+from kivy.properties import StringProperty, ObjectProperty
 from kivy.uix.modalview import ModalView
 from kivy.clock import Clock
 import tensorflow as tf
@@ -20,7 +20,7 @@ import shutil
 from datetime import datetime
 
 # Load the .kv file
-Builder.load_file('asd.kv')
+Builder.load_file('asdp.kv')
 
 class PredictionBar(BoxLayout):
     disease_name = StringProperty('')
@@ -51,14 +51,17 @@ class MainScreen(BoxLayout):
         self.load_model()
     
     def ensure_uploaded_images_folder(self):
-        if not os.path.exists('uploaded_images'):
-            os.makedirs('uploaded_images')
+        upload_folder = os.path.join(os.getcwd(), 'asdpapp', 'Predicted_disease_images')
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)
+        self.upload_folder = upload_folder
             
     def load_model(self):
         try:
-            model_path = 'C:\\Users\\asus\\OneDrive\\Desktop\\เอกสาร\\241-202\\asdapp\\model2\\model_fit_23-0.84.keras'
+            model_path = 'C:\\Users\\asus\\OneDrive\\Desktop\\เอกสาร\\241-202\\asdpapp\\model1\\model_finetuned1_19-0.96.keras'
             self.model = load_model(model_path)
             print("Model loaded successfully")
+
         except Exception as e:
             print(f"Failed to load model: {e}")
             self.show_error_popup(f"Failed to load model: {e}")
@@ -94,7 +97,7 @@ class MainScreen(BoxLayout):
         
         timestr = datetime.now().strftime("%Y%m%d_%H%M%S")
         file_ext = os.path.splitext(file_path)[1]
-        dest_file = f"uploaded_images/upload_{timestr}{file_ext}"
+        dest_file = os.path.join(self.upload_folder, f"Predicted_disease_{timestr}{file_ext}")
         
         try:
             shutil.copy2(file_path, dest_file)
@@ -129,9 +132,34 @@ class MainScreen(BoxLayout):
             
             self.ids.result_label.text = f"Prediction: {self.classes_dict.get(predicted_class, predicted_class)} ({confidence * 100:.1f}%)"
             self.update_result_bars(predictions[0])
+            self.update_treatment_info(predicted_class, confidence)
         except Exception as e:
             self.show_error_popup(f"Image processing error: {e}")
     
+    def update_treatment_info(self, predicted_class, confidence):
+        treatment_guidelines = {
+            'bacterial': "Clean the affected area with saline solution and take the dog to a veterinarian for treatment and antibiotics. To prevent further infection, keep the wound clean and dry, avoid scratching or licking, and ensure proper nutrition with high-quality food rich in protein, omega-3 fatty acids, and vitamins. Provide fresh water at all times. Follow the vet’s instructions for medication until fully healed.",
+            'fungal': "Clean the affected area with a mild antifungal solution or shampoo and take the dog to a veterinarian for proper diagnosis and antifungal treatment. To prevent further infection, keep the wound dry and clean, avoid scratching or licking, and ensure proper nutrition with high-quality food rich in protein, omega-3 fatty acids, and vitamins. Provide fresh water at all times. Follow the vet’s instructions for medication until fully healed.",
+            'healthy': "Your pet is healthy! Maintain good hygiene and a balanced diet to keep them in great condition.",
+            'hypersensitivity': "It is important to identify potential allergens that may cause allergic reactions, such as dust, pollen, or certain foods, and take the dog to a veterinarian for diagnosis and anti-inflammatory treatment if necessary. To prevent further reactions, keep the dog's environment clean, avoid suspected food allergens, and ensure proper nutrition with high-quality food rich in omega-3 fatty acids to reduce inflammation. Follow the vet's instructions for managing the condition."
+        }
+        
+        if predicted_class in ['bacterial', 'fungal', 'hypersensitivity'] and confidence > 0.02:
+            self.ids.treatment_label.text = f"{treatment_guidelines.get(predicted_class, 'No information available')}"
+            self.ids.warning_label.text = ""
+
+        elif predicted_class == 'healthy':
+            if confidence > 0.8:
+                self.ids.treatment_label.text = f"{treatment_guidelines.get(predicted_class, 'No information available')}"
+                self.ids.warning_label.text = ""
+            else:
+                self.ids.treatment_label.text = f"{treatment_guidelines.get(predicted_class, 'No information available')}"
+                self.ids.warning_label.text = ""
+
+        else:
+            self.ids.treatment_label.text = ""
+            self.ids.warning_label.text = "Warning: Unable to predict the disease. Please consult a veterinarian."
+
     def update_result_bars(self, predictions):
         self.ids.results_grid.clear_widgets()
         for i, cls in enumerate(self.classes):

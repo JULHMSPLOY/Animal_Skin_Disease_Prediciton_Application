@@ -77,42 +77,21 @@
             padding: [15, 15]
             spacing: 15
             
-            BoxLayout:
-                orientation: 'vertical'
+            Image:
+                id: preview_image
+                source: ''
+                allow_stretch: True
+                keep_ratio: True
+                size_hint: (1, None)
+                height: '250dp'
+
+            Button:
+                text: 'Choose Image'
                 size_hint_y: None
-                height: '350dp'
-                padding: [15, 10]
-                spacing: 15
-                
-                Image:
-                    id: preview_image
-                    source: ''
-                    allow_stretch: True
-                    keep_ratio: True
-                    size_hint: (1, None)
-                    height: '250dp'
-
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0, 0, 1  
-                        Line:
-                            width: 2
-                            rectangle: self.x - 5, self.y - 5, self.width + 10, self.height + 10 
-
-                BoxLayout:
-                    orientation: 'horizontal'
-                    size_hint_y: None
-                    height: '60dp'
-                    spacing: 20
-                    padding: [0, 10]
-                    
-                    Button:
-                        text: 'Choose Image File'
-                        size_hint_y: None
-                        height: '50dp'
-                        background_color: 0, 0.7, 1, 1
-                        font_size: '18dp'
-                        on_release: root.show_file_chooser()
+                height: '50dp'
+                background_color: 0, 0.7, 1, 1
+                font_size: '18dp'
+                on_release: root.show_file_chooser()
             
             Button:
                 id: predict_button
@@ -126,13 +105,15 @@
             
             Label:
                 id: result_label
-                text: 'Prediction Result: Awaiting Analysis'
+                text: 'Prediction Result: Awaiting Analysis...'
                 font_size: '20dp'
                 color: 0, 0, 0, 1
-                size_hint_y: None
+                size_hint_y: self.texture_size[1] + 10
                 height: '35dp'
-                padding: [0, 10, 0, 10]
+                padding: [10, 10]
+                valign: 'middle'
                 halign: 'center'
+                text_size: self.width, None
             
             GridLayout:
                 id: results_grid
@@ -141,3 +122,35 @@
                 size_hint_y: None
                 height: self.minimum_height
                 padding: [0, 10, 0, 15]
+
+            Label:
+                id: treatment_label
+                text: ''
+                font_size: '18dp'
+                color: 0, 0, 0, 1
+                size_hint_y: None
+                height: self.texture_size[1] + 10 if self.text else 0
+                padding: [10, 10]
+                halign: 'center'
+                valign: 'middle'
+                text_size: self.width- 20, None
+
+                canvas.before:
+                    Color:
+                        rgba: (0, 0, 0, 1) if self.text else (0, 0, 0, 0) 
+                    Line:
+                        width: 1.5  
+                        rectangle: (self.x, self.y, self.width, self.height) if self.text else (0, 0, 0, 0)
+            
+            Label:
+                id: warning_label
+                text: ''
+                font_size: '20dp'
+                color: 1, 0, 0, 1
+                size_hint_y: None
+                height: self.texture_size[1] + 10
+                padding: [10, 10]
+                halign: 'center'
+                valign: 'middle'
+                bold: True
+                text_size: self.width, None
