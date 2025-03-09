@@ -77,7 +77,7 @@ Image_Processor/
 # Setup
 
 ```sh
-pip install kivy tensorflow numpy
+pip install kivy tensorflow numpy pillow
 ```
 
 # Usage
