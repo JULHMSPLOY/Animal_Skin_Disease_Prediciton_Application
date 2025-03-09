@@ -1,12 +1,12 @@
-<PredictionBar>: # วิดเจ็ตที่ใช้แสดงแถบเปอร์เซ็นต์ของความน่าจะเป็นของโรคแต่ละชนิด
-    disease_name: '' # ชื่อของโรคที่คาดการณ์
-    probability: 0 # ค่าความน่าจะเป็นของโรค (0-100%)
-    bar_color: [0, 0, 0, 1] # สีของแถบแสดงเปอร์เซ็นต์
+<PredictionBar>: 
+    disease_name: '' 
+    probability: 0 
+    bar_color: [0, 0, 0, 1] 
     size_hint_y: None
     height: '60dp'
-    orientation: 'vertical' # เรียงวิดเจ็ตในแนวตั้ง
+    orientation: 'vertical'
     
-    Label: # แสดงชื่อโรคที่คาดการณ์
+    Label: 
         text: root.disease_name
         size_hint_y: None
         height: '25dp'
@@ -14,29 +14,29 @@
         color: 0, 0, 0, 1
         halign: 'center'
         
-    BoxLayout: # กล่องสำหรับแสดงแถบเปอร์เซ็นต์
+    BoxLayout: 
         size_hint_y: None
         height: '35dp'
         padding: [10, 5]
         spacing: 10
         
-        canvas.before: # กำหนดพื้นหลังของกล่องเป็นสีเทาอ่อน
+        canvas.before: 
             Color:
                 rgba: 0.9, 0.9, 0.9, 1
             Rectangle:
                 pos: self.pos
                 size: self.size
                 
-        BoxLayout: # กล่องที่ใช้เป็นแถบเปอร์เซ็นต์ของโรค
+        BoxLayout: 
             id: bar
             canvas.before:
                 Color:
-                    rgba: root.bar_color # ใช้สีที่กำหนดตามโรค
+                    rgba: root.bar_color 
                 Rectangle:
                     pos: self.pos
-                    size: self.width * (root.probability / 100.0), self.height # ปรับขนาดแถบตามเปอร์เซ็นต์
+                    size: self.width * (root.probability / 100.0), self.height 
                    
-        Label: # แสดงค่าเปอร์เซ็นต์เป็นตัวเลข
+        Label: 
             text: f"{root.probability:.1f}%"
             size_hint_x: None
             width: '60dp'
@@ -44,29 +44,29 @@
             font_size: '14dp'
             halign: 'center'
 
-<MainScreen>: # หน้าจอหลักของแอป
+<MainScreen>: 
     orientation: 'vertical'
     
-    canvas.before: # กำหนดพื้นหลังของแอปเป็นสีเทาอ่อน
+    canvas.before: 
         Color:
             rgba: 0.95, 0.95, 0.95, 1
         Rectangle:
             pos: self.pos
             size: self.size
     
-    BoxLayout: # ส่วนหัวของแอป
+    BoxLayout: 
         size_hint_y: None
         height: '70dp'
         padding: [20, 10]
         
         Label:
-            text: 'Animal Skin Disease Prediction' # หัวข้อของแอป
+            text: 'Animal Skin Disease Prediction' 
             font_size: '26dp'
             color: 0, 0.5, 1, 1
             halign: 'center'
             valign: 'middle'
     
-    ScrollView: # ส่วนของหน้าจอที่เลื่อนขึ้น-ลงได้
+    ScrollView: 
         do_scroll_x: False
         do_scroll_y: True
         
@@ -77,7 +77,7 @@
             padding: [15, 15]
             spacing: 15
             
-            Image: # แสดงรูปที่ผู้ใช้เลือก
+            Image: 
                 id: preview_image
                 source: ''
                 allow_stretch: True
@@ -85,25 +85,25 @@
                 size_hint: (1, None)
                 height: '250dp'
 
-            Button: # ปุ่มเลือกภาพ
+            Button: 
                 text: 'Choose Image'
                 size_hint_y: None
                 height: '50dp'
-                background_color: 0, 0.7, 1, 1 # สีฟ้า
+                background_color: 0, 0.7, 1, 1 
                 font_size: '18dp'
-                on_release: root.show_file_chooser() # เรียกฟังก์ชันให้เลือกไฟล์ภาพ
+                on_release: root.show_file_chooser() 
             
-            Button: # ปุ่มกดเพื่อให้โมเดลทำการวิเคราะห์
+            Button: 
                 id: predict_button
                 text: 'Predict Disease'
                 size_hint_y: None
                 height: '55dp'
-                background_color: 0, 0.7, 0.3, 1 # สีเขียว
+                background_color: 0, 0.7, 0.3, 1 
                 font_size: '18dp'
-                disabled: True # ปิดใช้งานจนกว่าจะเลือกภาพ
-                on_release: root.predict() # เรียกฟังก์ชันวิเคราะห์ภาพ
+                disabled: True 
+                on_release: root.predict() 
             
-            Label: # แสดงผลลัพธ์ของการทำนาย
+            Label: 
                 id: result_label
                 text: 'Prediction Result: Awaiting Analysis...'
                 font_size: '20dp'
@@ -115,7 +115,7 @@
                 halign: 'center'
                 text_size: self.width, None
             
-            GridLayout: # ใช้แสดง PredictionBars ตามโรคที่โมเดลวิเคราะห์พบ
+            GridLayout: 
                 id: results_grid
                 cols: 1
                 spacing: 15
@@ -123,7 +123,7 @@
                 height: self.minimum_height
                 padding: [0, 10, 0, 15]
 
-            Label: # แสดงคำแนะนำการรักษา
+            Label: 
                 id: treatment_label
                 text: ''
                 font_size: '18dp'
@@ -135,18 +135,18 @@
                 valign: 'middle'
                 text_size: self.width- 20, None
 
-                canvas.before: # วาดกรอบรอบข้อความคำแนะนำ
+                canvas.before: 
                     Color:
                         rgba: (0, 0, 0, 1) if self.text else (0, 0, 0, 0) 
                     Line:
                         width: 1.5  
                         rectangle: (self.x, self.y, self.width, self.height) if self.text else (0, 0, 0, 0)
             
-            Label: # แสดงคำเตือนหากพบโรคร้ายแรง
+            Label: 
                 id: warning_label
                 text: ''
                 font_size: '20dp'
-                color: 1, 0, 0, 1 # สีแดง
+                color: 1, 0, 0, 1
                 size_hint_y: None
                 height: self.texture_size[1] + 10
                 padding: [10, 10]
